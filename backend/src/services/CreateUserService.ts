@@ -1,9 +1,9 @@
-import mssql from 'mssql';
-import SqlServerConfig from '../config/sqlserverconfig';
+import IUsersRepository from 'repositories/IUserRepository';
 
 import User from '../model/User';
 import AppError from '../errors/AppError';
 import { hash } from 'bcrypt';
+
 
 interface IRequest{
     name: string;
@@ -12,22 +12,26 @@ interface IRequest{
 }
 
 export default class CreateUserService{
-    constructor(){}
+    private usersRepository: IUsersRepository
 
-    public async create({name, email, password}: IRequest): Promise<User|AppError>{
+    constructor(usersRepository: IUsersRepository){
+        this.usersRepository = usersRepository;
+    }
+
+    public async create({name, email, password}: IRequest): Promise<AppError>{
         const newUser = new User(name, email, password);
-        try{
-            await mssql.connect(SqlServerConfig);
+        try{            
+            const userExists = await this.usersRepository.findByEmail(newUser.email);
 
-            const userExists = await mssql.query(`SELECT 1 FROM Users WHERE email = '${newUser.email}'`);
-
-            if(userExists.rowsAffected[0]){
+            if(userExists){
                 return new AppError('Email já em uso', 409);
             }
 
             const hashedPassword = await hash(newUser.password, 8);
 
-            await mssql.query(`INSERT INTO Users (name, email, password) VALUES('${newUser.name}', '${newUser.email}', '${hashedPassword}')`);
+            newUser.password = hashedPassword;
+
+            await this.usersRepository.create(newUser);
 
             return new AppError('Usuário criado com sucesso', 200);
         }
