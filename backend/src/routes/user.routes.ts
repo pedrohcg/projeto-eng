@@ -3,8 +3,8 @@ import bodyParser from 'body-parser';
 import UsersRepository from '../repositories/UserRepository';
 
 import CreateUserService from '../services/CreateUserService';
-const jsonParser = bodyParser.json();
 
+const jsonParser = bodyParser.json();
 const usersRouter = Router();
 
 usersRouter.post('/register', jsonParser, async(req: Request, res: Response): Promise<Response> => {

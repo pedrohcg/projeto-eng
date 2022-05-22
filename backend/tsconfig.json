@@ -7,16 +7,15 @@
       "strict": true,
       "strictPropertyInitialization": false,
       "baseUrl": "./src",
-      "allowJs": true,
-      "paths": {
-        "@modules/*": ["modules/*"],
-        "@config/*": ["config/*"],
-        "@shared/*": ["shared/*"]
-      },
+      "allowJs": false,
       "esModuleInterop": true,
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
+      "forceConsistentCasingInFileNames": true,
+      "typeRoots": [
+        "./src/@types",
+        "./node_modules/@types"
+      ]
     }
   }

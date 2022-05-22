@@ -1,9 +1,6 @@
 import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import CreateUserService from './CreateUserService';
 
-import User from '../model/User';
-import AppError from '../errors/AppError';
-
 let fakeUsersRepository: FakeUsersRepository
 let createUser: CreateUserService
 
