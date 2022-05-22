@@ -1,8 +1,8 @@
 export default {
-    "user": "Pedro",
-    "password": "Macaco123",
-    "server": "engdb.database.windows.net",
-    "database": "projeto",
+    "user": "sa",
+    "password": "<YourStrong@Passw0rd>",
+    "server": "localhost",
+    "database": "rently",
     "trustServerCertificate": true,
     "encrypt": true
 }
