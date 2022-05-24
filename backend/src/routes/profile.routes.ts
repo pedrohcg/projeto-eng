@@ -1,7 +1,7 @@
 import {Request, Response, Router} from 'express';
 import bodyParser from 'body-parser';
 import UsersRepository from '../repositories/UserRepository';
-import ensureAuthenticated from '../middlewares/athenticate';
+import ensureAuthenticated from '../middlewares/authenticate';
 
 import UpdateProfileService from '../services/UpdateProfileService';
 

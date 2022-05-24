@@ -3,6 +3,7 @@ import IUsersRepository from '../IUserRepository';
 
 interface fakeUser extends User{
     id: string;
+    avatar: string;
 }
 
 class FakeUsersRepository implements IUsersRepository{
@@ -28,7 +29,7 @@ class FakeUsersRepository implements IUsersRepository{
     public async create(user: User): Promise<User>{  
         const id_String = this.user_id.toString();
 
-        const newUser: fakeUser = {id: id_String, name: user.name, email: user.email, password: user.password};
+        const newUser: fakeUser = {id: id_String, name: user.name, email: user.email, password: user.password, avatar: user.avatar};
 
         this.user_id += 1;
 
