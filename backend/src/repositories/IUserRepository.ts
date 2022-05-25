@@ -5,5 +5,4 @@ export default interface IUsersRepository{
     findByEmail(email: string): Promise<any>;
     create(data: User): Promise<User>;
     update(id: string, data: User): Promise<any>;
-    save(data: User): Promise<any>;
 }

@@ -28,21 +28,15 @@ class UsersRepository implements IUsersRepository{
   public async create(newUser: User): Promise<User>{
     await mssql.connect(SqlServerConfig);
 
-    await mssql.query(`INSERT INTO Users (name, email, password) VALUES('${newUser.name}', '${newUser.email}', '${newUser.password}')`);
+    await mssql.query(`INSERT INTO Users (name, email, password, avatar) VALUES('${newUser.name}', '${newUser.email}', '${newUser.password}', '${newUser.avatar}')`);
     
     return newUser;
-  }
-
-  public async save(user: User){
-    await mssql.connect(SqlServerConfig);
-
-    await mssql.query(`INSERT INTO Users (name, email, password) VALUES('${user.name}', '${user.email}', '${user.password}')`);
   }
 
   public async update(id: String, user: User){
     await mssql.connect(SqlServerConfig);
 
-    await mssql.query(`UPDATE Users SET name = '${user.name}', email = '${user.email}', password = '${user.password}' WHERE id = ${id}`)
+    await mssql.query(`UPDATE Users SET name = '${user.name}', email = '${user.email}', password = '${user.password}', avatar = '${user.avatar}' WHERE id = ${id}`)
   }
 }
 
