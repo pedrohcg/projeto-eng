@@ -22,6 +22,7 @@ export default class UpdateUserAvatarService{
     public async execute({user_id, avatarFilename}: IRequest): Promise<AppError>{
         if(avatarFilename){
             const user = await this.usersRepository.findById(user_id);
+
             if(!user){
                 return new AppError('Usuário não autenticado', 401);
             }
@@ -33,8 +34,8 @@ export default class UpdateUserAvatarService{
             const fileName = await this.filesRepository.save(avatarFilename);
 
             user.avatar = fileName;
-            
-            this.usersRepository.update(user_id, user);
+    
+            await this.usersRepository.update(user_id, user);
 
             return new AppError('Avatar alterado com sucesso', 200);
         }

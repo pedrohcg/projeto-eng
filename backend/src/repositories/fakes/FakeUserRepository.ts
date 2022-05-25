@@ -41,15 +41,15 @@ class FakeUsersRepository implements IUsersRepository{
     public async save(user: User){
         const findIndex = this.users.findIndex(findUser => findUser.email === user.email);
 
-        this.users[findIndex] = {id: this.users[findIndex].id,name: user.name,email: user.email,password: user.password};
+        this.users[findIndex] = {id: this.users[findIndex].id,name: user.name,email: user.email,password: user.password, avatar: user.avatar};
 
         return this.users[findIndex];
     }
 
-    public async update(id: string, user: User){
+    public async update(id: string, user: fakeUser){
         const findIndex = this.users.findIndex(findUser => findUser.id === id);
-
-        this.users[findIndex] = {id: this.users[findIndex].id,name: user.name,email: user.email,password: user.password};
+      
+        this.users[findIndex] = {id: this.users[findIndex].id,name: user.name,email: user.email,password: user.password, avatar: user.avatar};
 
         return this.users[findIndex];
     }

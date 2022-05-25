@@ -33,12 +33,6 @@ class UsersRepository implements IUsersRepository{
     return newUser;
   }
 
-  public async save(user: User){
-    await mssql.connect(SqlServerConfig);
-
-    await mssql.query(`INSERT INTO Users (name, email, password, avatar) VALUES('${user.name}', '${user.email}', '${user.password}', '${user.avatar}')`);
-  }
-
   public async update(id: String, user: User){
     await mssql.connect(SqlServerConfig);
 
