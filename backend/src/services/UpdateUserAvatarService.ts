@@ -1,6 +1,4 @@
 import path from 'path'
-import fs from 'fs'
-import uploadConfig from '../config/uploadConfig'
 import AppError from '../errors/AppError'
 import IUsersRepository from '../repositories/IUserRepository';
 import IFilesRepository from 'repositories/IFilesRepository';
