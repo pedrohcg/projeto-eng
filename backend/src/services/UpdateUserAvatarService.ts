@@ -38,7 +38,7 @@ export default class UpdateUserAvatarService{
             return new AppError('Avatar alterado com sucesso', 200);
         }
 
-        return new AppError('Erro interno', 500);
+        return new AppError('Arquivo não encontrado', 404);
     }
 }
 

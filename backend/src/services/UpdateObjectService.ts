@@ -3,9 +3,9 @@ import IObjectsRepository from '../repositories/IObjectsRepository';
 
 interface IRequest{
     id: string;
-    name: string;
-    description: string;
-    price: Number;
+    name?: string;
+    description?: string;
+    price?: Number;
 }
 
 export default class UpdateObjectService{
@@ -35,6 +35,9 @@ export default class UpdateObjectService{
         }
 
         if(price){
+            if(price < 0){
+                return new AppError('Preço inválido', 403);
+            }
             object.price = price;
         }
 

@@ -23,13 +23,10 @@ export default class CreateObjectService{
         }
         
         const newObject = new Object(user_id, price, description, name, image);
-        try{
-            await this.objectsRepository.create(newObject);
+       
+        await this.objectsRepository.create(newObject);
 
-            return new AppError('Item cadastrado com sucesso', 200);
-        }catch(err){
-            console.log(err)
-            return new AppError('Erro interno', 500);
-        }
+        return new AppError('Item cadastrado com sucesso', 200);
+       
     }
 }
