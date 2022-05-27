@@ -10,7 +10,7 @@ interface IRequest{
     password?: string;
 }
 
-export default class updateProfile{
+export default class UpdateProfileServie{
     private usersRepository: IUsersRepository;
 
     constructor(usersRepository: IUsersRepository){

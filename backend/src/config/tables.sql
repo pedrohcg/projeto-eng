@@ -14,3 +14,16 @@ price money,
 description varchar(255),
 image varchar(255)
 )
+
+create table chat(
+id int identity,
+user1 int,
+user2 int
+)
+
+create table message(
+id int,
+sender int,
+message varchar(800),
+date datetime
+)

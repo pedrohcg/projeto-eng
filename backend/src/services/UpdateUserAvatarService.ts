@@ -1,6 +1,4 @@
 import path from 'path'
-import fs from 'fs'
-import uploadConfig from '../config/uploadConfig'
 import AppError from '../errors/AppError'
 import IUsersRepository from '../repositories/IUserRepository';
 import IFilesRepository from 'repositories/IFilesRepository';
@@ -40,7 +38,7 @@ export default class UpdateUserAvatarService{
             return new AppError('Avatar alterado com sucesso', 200);
         }
 
-        return new AppError('Erro interno', 500);
+        return new AppError('Arquivo não encontrado', 404);
     }
 }
 

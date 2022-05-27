@@ -43,5 +43,9 @@ describe('UpdateUserAvatar', () => {
         expect(response.message).toMatch('Usuário não autenticado');
     })
 
+    it('Should not be able to update a avatar without providing a file', async() => {
+        const response = await updateUserAvatar.execute({user_id: '1', avatarFilename: ''});
 
+        expect(response.message).toMatch('Arquivo não encontrado');
+    })
 })

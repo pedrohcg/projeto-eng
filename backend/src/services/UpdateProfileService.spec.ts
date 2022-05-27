@@ -57,6 +57,4 @@ describe('CreateUser', () => {
       
         expect(updateTest.message).toMatch('Senha antiga incorreta');
     })
-    
-    
 })
