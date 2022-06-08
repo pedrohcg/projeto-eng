@@ -23,6 +23,6 @@ export default class SendMessageService{
         
         await this.messagesRepository.saveMessage(chat.id, {message: message, sender: sender});
 
-        return new AppError('Mensagem salva', 200);
+        return {message: 'Mensagem salva'};
     }
 }

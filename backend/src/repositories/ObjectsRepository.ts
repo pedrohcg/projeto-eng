@@ -12,7 +12,12 @@ export default class ObjectsRepository implements IObjectsRepository{
 
         await mssql.connect(SqlServerConfig);
 
-        const findUser = await mssql.query(`SELECT * FROM Objects WHERE id = ${user_id}`);
+        const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O 
+                                            INNER JOIN Categorias C 
+                                            ON O.category_id =  C.id
+                                            INNER JOIN Users U
+                                            ON O.owner_id = U.id
+                                            WHERE id = ${user_id}`);
 
         return findUser.recordset[0];
     }
@@ -22,9 +27,22 @@ export default class ObjectsRepository implements IObjectsRepository{
 
         await mssql.connect(SqlServerConfig);
 
-        const findUser = await mssql.query(`SELECT * FROM Objects WHERE owner_id = ${id}`);
+        const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O
+                                            INNER JOIN Categorias C 
+                                            ON O.category_id =  C.id
+                                            INNER JOIN Users U
+                                            ON O.owner_id = U.id
+                                            WHERE O.owner_id = ${id}`);
 
         return findUser.recordset;
+    }
+
+    public async getCategory(category_name: string): Promise<string> {
+        await mssql.connect(SqlServerConfig);
+
+        const category = await mssql.query(`SELECT id FROM Categorias WHERE name = '${category_name}'`);
+
+        return category.recordset[0].id;
     }
 
     public async update(id: string, data: Object): Promise<any> {
@@ -35,10 +53,10 @@ export default class ObjectsRepository implements IObjectsRepository{
 
     public async create(data: Object): Promise<any> {
         const id = Number(data.owner_id);
-        
+        console.log(data.category)
         await mssql.connect(SqlServerConfig);
 
-        await mssql.query(`INSERT INTO Objects (owner_id, name, price, description, image) 
-                        VALUES('${id}', '${data.name}', '${data.price}', '${data.description}', '${data.image}')`);
+        await mssql.query(`INSERT INTO Objects (owner_id, name, price, description, image, category_id) 
+                        VALUES('${id}', '${data.name}', '${data.price}', '${data.description}', '${data.image}', '${data.category}')`);
     }
 }

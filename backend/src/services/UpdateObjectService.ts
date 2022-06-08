@@ -43,6 +43,6 @@ export default class UpdateObjectService{
 
         await this.objectsRepository.update(object.id, object);
 
-        return new AppError('Informações do item atualizadas com sucesso', 200);
+        return {message: 'Informações do item atualizadas com sucesso'};
     }
 }

@@ -18,6 +18,7 @@ objectsRouter.post('/', jsonParser, ensureAuthenticated, upload.single('objImage
     const name = req.body.name;
     const description = req.body.description;
     const price = Number(req.body.price);
+    const category = req.body.category
     const objImg = req.file?.filename
 
 
@@ -25,14 +26,14 @@ objectsRouter.post('/', jsonParser, ensureAuthenticated, upload.single('objImage
 
     const createObject = new CreateObjectService(objectsRepository);
 
-    const response = await createObject.create(id, {name: name, description: description, image: objImg, price: price});
+    const response = await createObject.create(id, {name: name, description: description, image: objImg, price: price, category: category});
 
     return res.send(response);
 })
 
-objectsRouter.patch('/update', jsonParser, ensureAuthenticated, async(req: Request, res: Response) => {
+objectsRouter.patch('/update/:id', jsonParser, ensureAuthenticated, async(req: Request, res: Response) => {
     const id = req.user.id;
-    const objId = req.body.id;
+    const objId = req.params.id;
     const objName = req.body.name;
     const objDescription = req.body.description;
     const objPrice = req.body.price;

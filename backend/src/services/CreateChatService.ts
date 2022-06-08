@@ -26,6 +26,6 @@ export default class CreateChatService{
 
         await this.messagesRepository.createChat(sender, receiver);
 
-        return new AppError('Chat iniciado', 200);
+        return {message: 'Chat iniciado'};
     }
 }

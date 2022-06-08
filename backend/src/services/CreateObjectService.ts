@@ -6,6 +6,7 @@ import AppError from '../errors/AppError';
 interface IRequest{
     name: string;
     description: string;
+    category: string;
     image?: string;
     price: Number;
 }
@@ -17,16 +18,18 @@ export default class CreateObjectService{
         this.objectsRepository = objectsRepository;
     }
 
-    public async create(user_id: string, {name, description, image, price}: IRequest): Promise<AppError>{
+    public async create(user_id: string, {name, description, image, price, category}: IRequest) {
         if(price < 0){
             return new AppError('Não é possível colocar um preço negativo no item', 404);
         }
-        
-        const newObject = new Object(user_id, price, description, name, image);
+
+        const category_name = await this.objectsRepository.getCategory(category);
+
+        const newObject = new Object(user_id, price, description, name, category_name, image);
        
         await this.objectsRepository.create(newObject);
 
-        return new AppError('Item cadastrado com sucesso', 200);
+        return {message: 'Item cadastrado com sucesso'};
        
     }
 }

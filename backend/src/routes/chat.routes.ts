@@ -35,14 +35,26 @@ chatRouter.post('/', jsonParser, ensureAuthenticated, async(req: Request, res: R
     return res.send(response);
 });
 
-chatRouter.get('/', jsonParser, ensureAuthenticated, async(req: Request, res: Response) => {
-    const id = req.body.id;
+chatRouter.get('/', ensureAuthenticated, async(req: Request, res: Response) => {
+    const id = req.user.id;
 
     const messagesRepository = new MessagesRepository();
 
     const showMessages = new ShowMessagesService(messagesRepository);
 
-    const response = await showMessages.execute(id);
+    const response = await showMessages.showChats(id);
+
+    return res.send(response)
+})
+
+chatRouter.get('/:id', jsonParser, ensureAuthenticated, async(req: Request, res: Response) => {
+    const id = req.params.id;
+
+    const messagesRepository = new MessagesRepository();
+
+    const showMessages = new ShowMessagesService(messagesRepository);
+
+    const response = await showMessages.showMessage(id);
 
     return res.send(response)
 })

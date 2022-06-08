@@ -31,7 +31,7 @@ describe('CreateObject', () => {
 
     it('Should not be able to create a new item with negative price', async () =>{
         const response = await createObject.create('1', {name: 'smartphone', price: -3000, description: 'Latest smartphone available', image: ''});
-
+    
         expect(response.message).toMatch('Não é possível colocar um preço negativo no item')
     })
 })
