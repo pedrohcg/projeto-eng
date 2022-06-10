@@ -1,6 +1,5 @@
 import AppError from '../errors/AppError';
 import IMessagesRepository from '../repositories/IMessagesRepository';
-import IUsersRepository from '../repositories/IUserRepository';
 
 interface IRequest{
     sender: string;
