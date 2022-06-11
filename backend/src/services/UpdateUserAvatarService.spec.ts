@@ -27,7 +27,7 @@ describe('UpdateUserAvatar', () => {
     it('Should delete the old avatar when uploading a new one', async() => {
         const deleteFile = jest.spyOn(fakeFilesRepository, 'delete');
 
-        const user = await fakeUsersRepository.create({name: 'John', email: 'John@example.com', password: 'querty', avatar: ''});
+        await fakeUsersRepository.create({name: 'John', email: 'John@example.com', password: 'querty', avatar: ''});
 
         await updateUserAvatar.execute({user_id: '1', avatarFilename: 'avatar.png'});
      
