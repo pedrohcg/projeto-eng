@@ -59,4 +59,23 @@ objectsRouter.get('/', ensureAuthenticated, async(req: Request, res: Response) =
     return res.send(response);
 })
 
+objectsRouter.get('/:searchQuery', ensureAuthenticated, async(req: Request, res: Response) => {
+    const searchQuery = req.params.searchQuery;
+
+    const objectsRepository = new ObjectsRepository();
+
+    const showObjects = new ShowObjectListService(objectsRepository);
+
+    let response
+
+    if(Number(searchQuery) > 1 && Number(searchQuery) <= 6){
+        response = await showObjects.search({category: searchQuery});
+    }
+    else{
+        response = await showObjects.search({searchString: searchQuery});
+    }
+
+    return res.send(response);
+})
+
 export default objectsRouter;

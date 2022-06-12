@@ -13,7 +13,7 @@ export default class ObjectsRepository implements IObjectsRepository{
         await mssql.connect(SqlServerConfig);
 
         const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O 
-                                            INNER JOIN Categorias C 
+                                            INNER JOIN Categories C 
                                             ON O.category_id =  C.id
                                             INNER JOIN Users U
                                             ON O.owner_id = U.id
@@ -28,7 +28,7 @@ export default class ObjectsRepository implements IObjectsRepository{
         await mssql.connect(SqlServerConfig);
 
         const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O
-                                            INNER JOIN Categorias C 
+                                            INNER JOIN Categories C 
                                             ON O.category_id =  C.id
                                             INNER JOIN Users U
                                             ON O.owner_id = U.id
@@ -37,10 +37,37 @@ export default class ObjectsRepository implements IObjectsRepository{
         return findUser.recordset;
     }
 
+    public async findByCategory(category: string): Promise<any> {
+        await mssql.connect(SqlServerConfig);
+
+        const findItems = await mssql.query(`SELECT O.id, O.name ObjectName, O.price, O.description, O.image, U.name OwnerName, U.email, C.name Category FROM Objects O
+                                            INNER JOIN Users U
+                                            ON O.owner_id = U.id
+                                            INNER JOIN Categories C
+                                            ON C.id = O.category_id
+                                            WHERE O.category_id = ${category}`);
+        
+        return findItems.recordset;
+    }
+
+    public async findByString(searchString: string): Promise<any> {
+        await mssql.connect(SqlServerConfig);
+
+        const findItems = await mssql.query(`SELECT O.id, O.name ObjectName, O.price, O.description, O.image, U.name OwnerName, U.email, C.name Category FROM Objects O
+                                            INNER JOIN Users U
+                                            ON O.owner_id = U.id
+                                            INNER JOIN Categories C
+                                            ON C.id = O.category_id
+                                            WHERE O.name like '%${searchString}%'
+                                            or O.description like '%${searchString}%'`);
+
+        return findItems.recordset;
+    }
+
     public async getCategory(category_name: string): Promise<string> {
         await mssql.connect(SqlServerConfig);
 
-        const category = await mssql.query(`SELECT id FROM Categorias WHERE name = '${category_name}'`);
+        const category = await mssql.query(`SELECT id FROM Categories WHERE name = '${category_name}'`);
 
         return category.recordset[0].id;
     }
