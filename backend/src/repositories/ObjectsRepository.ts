@@ -12,12 +12,12 @@ export default class ObjectsRepository implements IObjectsRepository{
 
         await mssql.connect(SqlServerConfig);
 
-        const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O 
+        const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name, O.price, O.description, O.image, C.name Category_Name FROM Objects O 
                                             INNER JOIN Categories C 
                                             ON O.category_id =  C.id
                                             INNER JOIN Users U
                                             ON O.owner_id = U.id
-                                            WHERE id = ${user_id}`);
+                                            WHERE O.id = ${user_id}`);
 
         return findUser.recordset[0];
     }
@@ -27,7 +27,7 @@ export default class ObjectsRepository implements IObjectsRepository{
 
         await mssql.connect(SqlServerConfig);
 
-        const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O
+        const findUser = await mssql.query(`SELECT O.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O
                                             INNER JOIN Categories C 
                                             ON O.category_id =  C.id
                                             INNER JOIN Users U
@@ -64,6 +64,14 @@ export default class ObjectsRepository implements IObjectsRepository{
         return findItems.recordset;
     }
 
+    public async findRandomObject(): Promise<any> {
+        await mssql.connect(SqlServerConfig);
+
+        const objects = await mssql.query(`SELECT TOP 5 * FROM Objects ORDER BY NEWID()`)
+
+        return objects.recordset
+    }
+
     public async getCategory(category_name: string): Promise<string> {
         await mssql.connect(SqlServerConfig);
 
@@ -74,8 +82,14 @@ export default class ObjectsRepository implements IObjectsRepository{
 
     public async update(id: string, data: Object): Promise<any> {
         await mssql.connect(SqlServerConfig);
-
+       
         await mssql.query(`UPDATE Objects SET name = '${data.name}', price = '${data.price}', description = '${data.description}', image = '${data.image}' WHERE id = ${id}`)
+    }
+
+    public async delete(id: string){
+        await mssql.connect(SqlServerConfig);
+
+        await mssql.query(`DELETE FROM Objects WHERE id = ${id}`)
     }
 
     public async create(data: Object): Promise<any> {

@@ -31,6 +31,41 @@ export default class FakeObjectsRepository implements IObjectsRepository{
         return userItems;
     }
 
+    public async findByString(searchString: string): Promise<any> {
+        const userItems: fakeObject[] = [];
+
+        this.items.forEach(function(item){
+            if(item.name.indexOf(searchString) >= 0 || item.description.indexOf(searchString) >= 0){
+                userItems.push(item);
+            }
+        });
+
+        return userItems;
+    }
+
+    public async findByCategory(category: string): Promise<any> {
+        const userItems: fakeObject[] = [];
+        const fakeCategory = await this.getCategory(category)
+
+        this.items.forEach(function(item){
+            if(item.category === fakeCategory){
+                userItems.push(item);
+            }
+        });
+
+        return userItems;
+    }
+
+    public async findRandomObject(): Promise<any> {
+        const userItems: fakeObject[] = [];
+
+        this.items.forEach(function(item){
+          userItems.push(item); 
+        });
+
+        return userItems;
+    }
+
     public async getCategory(category_id: string): Promise<string> {
         return "Eletronico"
     }
@@ -45,6 +80,12 @@ export default class FakeObjectsRepository implements IObjectsRepository{
         this.items.push(newObject);
       
         return newObject;
+    }
+
+    public async delete(id: string): Promise<any> {
+        const findIndex = this.items.findIndex(findItem => findItem.id === id);
+
+        delete this.items[findIndex];
     }
 
     public async update(id: string, data: Object): Promise<any> {

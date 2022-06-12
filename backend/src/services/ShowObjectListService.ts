@@ -1,4 +1,5 @@
-import IObjectsRepository from 'repositories/IObjectsRepository';
+import IObjectsRepository from '../repositories/IObjectsRepository';
+import Object from '../model/Object';
 
 interface IUserSerach{
     category?: string;
@@ -33,6 +34,8 @@ export default class ShowObjectListService{
     }
 
     public async showHomePage(){
+        const objects = await this.objectsRepository.findRandomObject();
 
+        return objects;
     }
 }
