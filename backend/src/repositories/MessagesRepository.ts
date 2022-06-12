@@ -35,6 +35,22 @@ export default class MessagesRepository implements IMessagesRepository{
         await mssql.query(`INSERT INTO Message (id, sender, message, date) VALUES (${idChat}, ${id}, '${data.message}', dateadd(hour, -3, getDate()))`)
     }
 
+    public async getUserChats(id: string): Promise<any> {
+        await mssql.connect(SqlServerConfig);
+
+        const chats = await mssql.query(`SELECT c.id, u.name from CHAT c
+                                            INNER JOIN users u
+                                            ON c.user1 = u.id
+                                            WHERE user1 = ${id}
+                                            UNION ALL
+                                            SELECT c.id, u.name from CHAT c
+                                            INNER JOIN users u
+                                            ON c.user2 = u.id
+                                            WHERE user2 = ${id}`)
+
+        return chats.recordset;
+    }
+
     public async getChatLog(id: string): Promise<any> {
         await mssql.connect(SqlServerConfig);
 

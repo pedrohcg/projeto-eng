@@ -27,3 +27,15 @@ sender int,
 message varchar(800),
 date datetime
 )
+
+create table categorias(
+id int identity,
+name varchar(60)
+)
+
+insert into categories(name) values ('Cars')
+insert into categories(name) values ('Computers')
+insert into categories(name) values ('Furniture')
+insert into categories(name) values ('Kitchen')
+insert into categories(name) values ('Smartphones')
+insert into categories(name) values ('Gaming')

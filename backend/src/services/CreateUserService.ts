@@ -18,7 +18,7 @@ export default class CreateUserService{
         this.usersRepository = usersRepository;
     }
 
-    public async create({name, email, password}: IRequest): Promise<AppError>{
+    public async create({name, email, password}: IRequest) {
         const newUser = new User(name, email, password);
         try{            
             const userExists = await this.usersRepository.findByEmail(newUser.email);
@@ -33,7 +33,7 @@ export default class CreateUserService{
 
             await this.usersRepository.create(newUser);
 
-            return new AppError('Usuário criado com sucesso', 200);
+            return {message: 'Usuário criado com sucesso'};
         }
         catch(err){
             console.log(err)

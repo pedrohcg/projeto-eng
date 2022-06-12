@@ -17,7 +17,7 @@ export default class UpdateProfileServie{
         this.usersRepository = usersRepository
     }
 
-    public async execute({user_id, name, email, old_password, password}: IRequest): Promise<AppError>{
+    public async execute({user_id, name, email, old_password, password}: IRequest) {
         const user = await this.usersRepository.findById(user_id);
         
         if(!user){
@@ -56,6 +56,6 @@ export default class UpdateProfileServie{
 
         await this.usersRepository.update(user_id, user);
 
-        return new AppError('Informações atualizadas com sucesso', 200);
+        return {message: 'Informações atualizadas com sucesso'};
     }
 }

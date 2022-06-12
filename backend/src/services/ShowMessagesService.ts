@@ -8,7 +8,13 @@ export default class ShowMessagesService{
         this.messagesRepository = messagesRepository;
     }
 
-    public async execute(id: string){
+    public async showChats(id: string){
+        const chats = await this.messagesRepository.getUserChats(id);
+
+        return chats
+    }
+
+    public async showMessage(id: string){
         const chat = await this.messagesRepository.getChatLog(id);
 
         if(!chat){

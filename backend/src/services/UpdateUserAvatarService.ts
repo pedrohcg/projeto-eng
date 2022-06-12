@@ -17,7 +17,7 @@ export default class UpdateUserAvatarService{
         this.filesRepository = filesRepository;
     }
 
-    public async execute({user_id, avatarFilename}: IRequest): Promise<AppError>{
+    public async execute({user_id, avatarFilename}: IRequest) {
         if(avatarFilename){
             const user = await this.usersRepository.findById(user_id);
 
@@ -35,7 +35,7 @@ export default class UpdateUserAvatarService{
     
             await this.usersRepository.update(user_id, user);
 
-            return new AppError('Avatar alterado com sucesso', 200);
+            return {message: 'Avatar alterado com sucesso'};
         }
 
         return new AppError('Arquivo não encontrado', 404);

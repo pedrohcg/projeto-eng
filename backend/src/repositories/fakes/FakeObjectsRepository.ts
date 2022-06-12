@@ -31,10 +31,49 @@ export default class FakeObjectsRepository implements IObjectsRepository{
         return userItems;
     }
 
+    public async findByString(searchString: string): Promise<any> {
+        const userItems: fakeObject[] = [];
+
+        this.items.forEach(function(item){
+            if(item.name.indexOf(searchString) >= 0 || item.description.indexOf(searchString) >= 0){
+                userItems.push(item);
+            }
+        });
+
+        return userItems;
+    }
+
+    public async findByCategory(category: string): Promise<any> {
+        const userItems: fakeObject[] = [];
+        const fakeCategory = await this.getCategory(category)
+
+        this.items.forEach(function(item){
+            if(item.category === fakeCategory){
+                userItems.push(item);
+            }
+        });
+
+        return userItems;
+    }
+
+    public async findRandomObject(): Promise<any> {
+        const userItems: fakeObject[] = [];
+
+        this.items.forEach(function(item){
+          userItems.push(item); 
+        });
+
+        return userItems;
+    }
+
+    public async getCategory(category_id: string): Promise<string> {
+        return "Eletronico"
+    }
+
     public async create(data: Object): Promise<any> {
         const id_String = this.object_id.toString();
 
-        const newObject: fakeObject = {id: id_String, owner_id: data.owner_id, name: data.name, price: data.price, description: data.description, image: data.image};
+        const newObject: fakeObject = {id: id_String, owner_id: data.owner_id, name: data.name, price: data.price, description: data.description, category: data.category, image: data.image};
 
         this.object_id += 1;
 
@@ -43,10 +82,16 @@ export default class FakeObjectsRepository implements IObjectsRepository{
         return newObject;
     }
 
+    public async delete(id: string): Promise<any> {
+        const findIndex = this.items.findIndex(findItem => findItem.id === id);
+
+        delete this.items[findIndex];
+    }
+
     public async update(id: string, data: Object): Promise<any> {
         const findIndex = this.items.findIndex(findItem => findItem.id === id);
       
-        this.items[findIndex] = {id: this.items[findIndex].id, owner_id: data.owner_id, name: data.name, price: data.price, description: data.description, image: data.image};
+        this.items[findIndex] = {id: this.items[findIndex].id, owner_id: data.owner_id, name: data.name, price: data.price, description: data.description, category: data.category, image: data.image};
 
         return this.items[findIndex];
     }
