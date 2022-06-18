@@ -1,6 +1,7 @@
 import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import ResetPasswordService from './ResetPasswordService';
 import CreateUserService from './CreateUserService';
+import AppError from '../errors/AppError'
 
 let fakeUsersRepository: FakeUsersRepository
 let resetPassword: ResetPasswordService
@@ -25,8 +26,6 @@ describe('ResetPassword', () => {
     })
 
     it('Should not be able to reset a unexisting user password', async () =>{
-        const newPassword = await resetPassword.execute('John@example.com')
-      
-        expect(newPassword.message).toMatch('Usuário não encontrado')
+        expect(resetPassword.execute('John@example.com')).rejects.toBeInstanceOf(AppError);
     })
 })

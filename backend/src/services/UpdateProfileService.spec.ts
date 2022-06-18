@@ -2,6 +2,7 @@ import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import CreateUserService from './CreateUserService';
 import UpdateProfileService from './UpdateProfileService';
 import { compare } from 'bcrypt';
+import AppError from '../errors/AppError'
 
 let fakeUsersRepository: FakeUsersRepository
 let createUser: CreateUserService
@@ -36,25 +37,19 @@ describe('CreateUser', () => {
         await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
         await createUser.create({name: 'John Doe', email: 'Johndoe@example.com', password: 'querty'});
 
-        const updateTest = await updateProfile.execute({user_id: '1', name: 'John Doe', email: 'Johndoe@example.com'})
-      
-        expect(updateTest.message).toMatch('Email já em uso')
+        expect(updateProfile.execute({user_id: '1', name: 'John Doe', email: 'Johndoe@example.com'})).rejects.toBeInstanceOf(AppError);
     })
 
 
     it('Should not be able to update the password without the old one', async () =>{
         await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
 
-        const updateTest = await updateProfile.execute({user_id: '1', name: 'John', email: 'John@example.com', password: 'john'})
-      
-        expect(updateTest.message).toMatch('Senha antiga incorreta');
+        expect(updateProfile.execute({user_id: '1', name: 'John', email: 'John@example.com', password: 'john'})).rejects.toBeInstanceOf(AppError);
     })
 
     it('Should not be able to update the password with a wrong old password', async () =>{
         await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
 
-        const updateTest = await updateProfile.execute({user_id: '1', name: 'John', email: 'John@example.com', password: 'john', old_password: 'macacada'})
-      
-        expect(updateTest.message).toMatch('Senha antiga incorreta');
+        expect(updateProfile.execute({user_id: '1', name: 'John', email: 'John@example.com', password: 'john', old_password: 'macacada'})).rejects.toBeInstanceOf(AppError);
     })
 })

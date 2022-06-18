@@ -12,7 +12,7 @@ export default class ShowProfileService{
         const user = await this.usersRepository.findById(user_id);
     
         if(!user){
-            return new AppError('Usuário não autenticado', 401);
+            throw new AppError('Usuário não autenticado', 401);
         }
 
         delete user.password;

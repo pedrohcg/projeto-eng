@@ -20,24 +20,19 @@ export default class CreateUserService{
 
     public async create({name, email, password}: IRequest) {
         const newUser = new User(name, email, password);
-        try{            
-            const userExists = await this.usersRepository.findByEmail(newUser.email);
 
-            if(userExists){
-                return new AppError('Email já em uso', 409);
-            }
+        const userExists = await this.usersRepository.findByEmail(newUser.email);
 
-            const hashedPassword = await hash(newUser.password, 8);
-
-            newUser.password = hashedPassword;
-
-            await this.usersRepository.create(newUser);
-
-            return {message: 'Usuário criado com sucesso'};
+        if(userExists){
+            throw new AppError('Email já em uso', 409);
         }
-        catch(err){
-            console.log(err)
-            return new AppError('Erro interno', 500);
-        }
+
+        const hashedPassword = await hash(newUser.password, 8);
+
+        newUser.password = hashedPassword;
+
+        await this.usersRepository.create(newUser);
+
+        return {message: 'Usuário criado com sucesso'};
     }
 }

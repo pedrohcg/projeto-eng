@@ -2,6 +2,7 @@ import FakeMessagesRepository from "../repositories/fakes/FakeMessagesRepository
 import FakeUsersRepository from '../repositories/fakes/FakeUserRepository';
 import CreateUserService from './CreateUserService';
 import CreateChatService from "./CreateChatService";
+import AppError from '../errors/AppError'
 
 let fakeMessagesRepository: FakeMessagesRepository
 let fakeUsersRepository: FakeUsersRepository
@@ -33,9 +34,7 @@ describe('CreateChat', () => {
         
         const user1 = await fakeUsersRepository.findById('1')
 
-        const response = await createChat.create(user1.id, '2');
-
-        expect(response.message).toMatch('Usuário não encontrado')
+        expect(createChat.create(user1.id, '2')).rejects.toBeInstanceOf(AppError);
     })
 
 })

@@ -21,7 +21,7 @@ export default class CreateObjectService{
     public async create(user_id: string, {name, description, image, price, category}: IRequest) {
         
         if(price < 0){
-            return new AppError('Não é possível colocar um preço negativo no item', 404);
+            throw new AppError('Não é possível colocar um preço negativo no item', 404);
         }
 
         const category_name = await this.objectsRepository.getCategory(category);

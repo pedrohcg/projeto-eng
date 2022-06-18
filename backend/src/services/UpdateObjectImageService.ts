@@ -22,7 +22,7 @@ export default class UpdateObjectImageService{
             const object = await this.objectsRepository.findById(object_id);
 
             if(!object){
-                return new AppError('Objecto não encontrado', 401);
+                throw new AppError('Objecto não encontrado', 401);
             }
            
             if(object.image !== path.resolve(__dirname, '..','tmp', 'interrogation.png')){
@@ -38,7 +38,7 @@ export default class UpdateObjectImageService{
             return {message: 'Imagem alterado com sucesso'};
         }
 
-        return new AppError('Arquivo não encontrado', 404);
+        throw new AppError('Arquivo não encontrado', 404);
     }
 }
 

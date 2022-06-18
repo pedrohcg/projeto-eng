@@ -10,7 +10,7 @@ class User{
         this.name = name;
         this.email = email;
         this.password = password;
-        this.avatar = path.resolve(__dirname, '..','tmp', 'default.png');
+        this.avatar = "https://www.tenforums.com/geek/gars/images/2/types/thumb_15951118880user.png";
     }
 }
 

@@ -1,5 +1,6 @@
 import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import CreateUserService from './CreateUserService';
+import AppError from '../errors/AppError'
 
 let fakeUsersRepository: FakeUsersRepository
 let createUser: CreateUserService
@@ -17,8 +18,8 @@ describe('CreateUser', () => {
     })
 
     it('Should not be able to create two users with the same email', async () => {
-        const user = await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
-
-        expect((await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'})).message).toMatch('Email já em uso')
+        await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
+        
+        expect(createUser.create({name: 'John', email: 'John@example.com', password: 'querty'})).rejects.toBeInstanceOf(AppError);
     })
 })

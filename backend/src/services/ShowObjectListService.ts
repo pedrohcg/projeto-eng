@@ -1,5 +1,4 @@
 import IObjectsRepository from '../repositories/IObjectsRepository';
-import Object from '../model/Object';
 
 interface IUserSerach{
     category?: string;
@@ -31,6 +30,12 @@ export default class ShowObjectListService{
 
             return objects;
         }
+    }
+
+    public async showOne(id: string){
+        const object = await this.objectsRepository.findById(id);
+        
+        return object;
     }
 
     public async showHomePage(){

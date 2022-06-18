@@ -5,6 +5,7 @@ interface IRequest{
     id: string;
     name?: string;
     description?: string;
+    image?: string;
     price?: Number;
 }
 
@@ -15,15 +16,15 @@ export default class UpdateObjectService{
         this.objectsRepository = objectsRepository;
     }
 
-    public async execute(user_id: string, {id, name, description, price}: IRequest){
+    public async execute(user_id: string, {id, name, description, price, image}: IRequest){
         const object = await this.objectsRepository.findById(id);
 
         if(!object){
-            return new AppError('Item não encontrado', 404);
+            throw new AppError('Item não encontrado', 404);
         }
        
         if(user_id != object.owner_id){
-            return new AppError('Erro de permissão', 403);
+            throw new AppError('Erro de permissão', 403);
         }
 
         if(name){
@@ -34,9 +35,13 @@ export default class UpdateObjectService{
             object.description = description;
         }
 
+        if(image){
+            object.image = image;
+        }
+
         if(price){
             if(price < 0){
-                return new AppError('Preço inválido', 403);
+                throw new AppError('Preço inválido', 403);
             }
             object.price = price;
         }

@@ -17,7 +17,7 @@ export default class Objects{
         if(image){
             this.image = image;
         } else{
-            this.image = path.resolve(__dirname, '..','tmp', 'interrogation.png');
+            this.image = "https://upload.wikimedia.org/wikipedia/commons/2/20/Point_d_interrogation.jpg";
         }
     }
 }

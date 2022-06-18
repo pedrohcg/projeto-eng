@@ -14,8 +14,21 @@ const chatRouter = Router();
 
 chatRouter.post('/', jsonParser, ensureAuthenticated, async(req: Request, res: Response) => {
     const sender = req.user.id;
-    const receiver = req.body.id;
+    const receiver = req.body.receiver;
     const message = req.body.message;
+
+    const messagesRepository = new MessagesRepository();
+ 
+    const sendMessage = new SendMessageService(messagesRepository);
+
+    const response = await sendMessage.create(receiver, {sender, message});
+   
+    return res.send(response);
+});
+
+chatRouter.post('/create/:id', jsonParser, ensureAuthenticated, async(req: Request, res: Response) => {
+    const sender = req.user.id;
+    const receiver = req.params.id;
 
     const usersRepository = new UsersRepository();
     const messagesRepository = new MessagesRepository();
@@ -26,13 +39,13 @@ chatRouter.post('/', jsonParser, ensureAuthenticated, async(req: Request, res: R
         const createChat = new CreateChatService(messagesRepository, usersRepository);
 
         await createChat.create(sender, receiver);
+
+        const newChat = await messagesRepository.getChat(sender, receiver)
+ 
+        return res.json(newChat.id);
     }
 
-    const sendMessage = new SendMessageService(messagesRepository);
-
-    const response = await sendMessage.create(receiver, {sender, message});
- 
-    return res.send(response);
+    return res.json(chatExists.id)
 });
 
 chatRouter.get('/', ensureAuthenticated, async(req: Request, res: Response) => {

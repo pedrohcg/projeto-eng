@@ -21,13 +21,13 @@ export default class UpdateProfileServie{
         const user = await this.usersRepository.findById(user_id);
         
         if(!user){
-            return new AppError('Email/senha incorretos', 403);
+            throw new AppError('Email/senha incorretos', 403);
         }
 
         const verifyEmail = await this.usersRepository.findByEmail(email);
 
         if(verifyEmail && verifyEmail.id !== user_id){
-            return new AppError('Email já em uso', 409);
+            throw new AppError('Email já em uso', 409);
         }
 
         if(name){
@@ -39,14 +39,14 @@ export default class UpdateProfileServie{
         }
 
         if(password && !old_password){
-            return new AppError('Senha antiga incorreta');
+            throw new AppError('Senha antiga incorreta');
         }
 
         if(password && old_password){
             const passwordMatches = await compare(old_password, user.password);
 
             if(!passwordMatches){
-                return new AppError('Senha antiga incorreta');
+                throw new AppError('Senha antiga incorreta');
             }
         }
 

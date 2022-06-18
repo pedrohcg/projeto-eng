@@ -15,7 +15,7 @@ export default class ResetPasswordService{
         const user = await this.usersRepository.findByEmail(email);
 
         if(!user){
-            return new AppError('Usuário não encontrado', 403);
+            throw new AppError('Usuário não encontrado', 403);
         }
 
         const newPassword = await generatePassword.generate({length: 10, numbers: true})
