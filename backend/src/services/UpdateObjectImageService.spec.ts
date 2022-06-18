@@ -2,6 +2,7 @@ import FakeObjectsRepository from "../repositories/fakes/FakeObjectsRepository";
 import FakeFilesRepository from "../repositories/fakes/FakeFilesRepository";
 import CreateObjectService from './CreateObjectService';
 import UpdateObjectImageService from "./UpdateObjectImageService";
+import AppError from '../errors/AppError'
 
 let fakeObjectsRepository: FakeObjectsRepository
 let fakeFilesRepository: FakeFilesRepository
@@ -40,14 +41,10 @@ describe('UpdateUserAvatar', () => {
     })
 
     it('Should not be able to update a non-existing object image', async() => {
-        const response = await updateObjectImage.execute({object_id: '1', imageFilename: 'avatar.png'});
-
-        expect(response.message).toMatch('Objecto não encontrado');
+        expect(updateObjectImage.execute({object_id: '1', imageFilename: 'avatar.png'})).rejects.toBeInstanceOf(AppError);
     })
 
     it('Should not be able to update a avatar without providing a file', async() => {
-        const response = await updateObjectImage.execute({object_id: '1', imageFilename: ''});
-
-        expect(response.message).toMatch('Arquivo não encontrado');
+        expect(updateObjectImage.execute({object_id: '1', imageFilename: ''})).rejects.toBeInstanceOf(AppError);
     })
 })

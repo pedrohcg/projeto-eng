@@ -7,7 +7,7 @@ import AuthenticateUserService from '../services/AuthenticateUserService';
 const jsonParser = bodyParser.json();
 const sessionsRouter = Router();
 
-sessionsRouter.post('/', jsonParser, async (req: Request, res: Response): Promise<Response> => {
+sessionsRouter.post('/', async (req: Request, res: Response): Promise<Response> => {
     const email = req.body.email;
     const password = req.body.password;
 
@@ -20,4 +20,4 @@ sessionsRouter.post('/', jsonParser, async (req: Request, res: Response): Promis
     return res.json(user);
 })
 
-export default sessionsRouter
+export default sessionsRouter;

@@ -1,6 +1,7 @@
 import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import AuthenticateUserService from "./AuthenticateUserService";
 import CreateUserService from './CreateUserService';
+import AppError from '../errors/AppError'
 
 let fakeUsersRepository: FakeUsersRepository
 let authenticateUser: AuthenticateUserService
@@ -22,16 +23,10 @@ describe('AuthenticateUser', () => {
     })
 
     it('Should not be able to authenticate with wrong password', async () =>{
-        await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
-
-        const response = await authenticateUser.execute({email: 'John@example.com', password: 'querty12'});
-
-        expect(response.message).toMatch('Email/senha incorretos');
+        expect(authenticateUser.execute({email: 'John@example.com', password: 'querty12'})).rejects.toBeInstanceOf(AppError);
     })
 
     it('Should not be able to authenticate with non existing user', async () =>{
-        const response = await authenticateUser.execute({email: 'John@example.com', password: 'querty12'});
-
-        expect(response.message).toMatch('Email/senha incorretos');
+       expect(authenticateUser.execute({email: 'John@example.com', password: 'querty12'})).rejects.toBeInstanceOf(AppError);
     })
 })

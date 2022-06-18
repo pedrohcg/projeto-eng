@@ -18,7 +18,7 @@ export default class ShowMessagesService{
         const chat = await this.messagesRepository.getChatLog(id);
 
         if(!chat){
-            return new AppError('Erro interno', 500);
+            throw new AppError('Erro interno', 500);
         }
 
         return chat;

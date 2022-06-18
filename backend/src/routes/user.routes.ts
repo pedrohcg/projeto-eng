@@ -13,10 +13,10 @@ const jsonParser = bodyParser.json();
 const usersRouter = Router();
 const upload = multer(uploadConfig);
 
-usersRouter.post('/register', jsonParser, async(req: Request, res: Response): Promise<Response> => {
-    const name = req.body.Name;
-    const email = req.body.Email;
-    const password = req.body.Password;
+usersRouter.post('/', jsonParser, async(req: Request, res: Response): Promise<Response> => {
+    const name = req.body.name;
+    const email = req.body.email;
+    const password = req.body.password;
 
     const userRepository = new UsersRepository();
 

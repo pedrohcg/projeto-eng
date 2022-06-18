@@ -2,6 +2,7 @@ import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import FakeFilesRepository from "../repositories/fakes/FakeFilesRepository";
 import CreateUserService from './CreateUserService';
 import UpdateUserAvatarService from "./UpdateUserAvatarService";
+import AppError from '../errors/AppError'
 
 let fakeUsersRepository: FakeUsersRepository
 let fakeFilesRepository: FakeFilesRepository
@@ -38,14 +39,10 @@ describe('UpdateUserAvatar', () => {
     })
 
     it('Should not be able to update a non-existing user avatar', async() => {
-        const response = await updateUserAvatar.execute({user_id: '1', avatarFilename: 'avatar.png'});
-
-        expect(response.message).toMatch('Usuário não autenticado');
+        expect(updateUserAvatar.execute({user_id: '1', avatarFilename: 'avatar.png'})).rejects.toBeInstanceOf(AppError);
     })
 
     it('Should not be able to update a avatar without providing a file', async() => {
-        const response = await updateUserAvatar.execute({user_id: '1', avatarFilename: ''});
-
-        expect(response.message).toMatch('Arquivo não encontrado');
+        expect(updateUserAvatar.execute({user_id: '1', avatarFilename: ''})).rejects.toBeInstanceOf(AppError);
     })
 })

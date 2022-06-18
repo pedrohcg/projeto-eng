@@ -15,13 +15,13 @@ export default class CreateChatService{
         const user1 = await this.usersRepository.findById(sender);
 
         if(!user1){
-            return new AppError('Usuário não encontrado', 404);
+            throw new AppError('Usuário não encontrado', 404);
         }
 
         const user2 = await this.usersRepository.findById(receiver);
 
         if(!user2){
-            return new AppError('Usuário não encontrado', 404);
+            throw new AppError('Usuário não encontrado', 404);
         }
 
         await this.messagesRepository.createChat(sender, receiver);

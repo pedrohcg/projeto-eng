@@ -4,6 +4,7 @@ import ensureAuthenticated from '../middlewares/authenticate';
 import FilesRepository from '../repositories/FilesRepository';
 import multer from 'multer';
 import uploadConfig from '../config/uploadConfig';
+import path from 'path';
 
 import CreateObjectService from '../services/CreateObjectService';
 import ObjectsRepository from '../repositories/ObjectsRepository';
@@ -22,15 +23,17 @@ objectsRouter.post('/', jsonParser, ensureAuthenticated, async(req: Request, res
     const description = req.body.description;
     const price = Number(req.body.price);
     const category = req.body.category
+    const image = req.body.image
 
     const objectsRepository = new ObjectsRepository();
 
     const createObject = new CreateObjectService(objectsRepository);
 
-    const response = await createObject.create(id, {name: name, description: description, price: price, category: category});
+    const response = await createObject.create(id, {name: name, description: description, price: price, category: category, image: image});
 
     return res.send(response);
 })
+
 
 objectsRouter.patch('/image/:id', jsonParser, ensureAuthenticated, upload.single('objImage'), async(req: Request, res: Response) => {
     const objImg = req.file?.filename;
@@ -52,12 +55,13 @@ objectsRouter.patch('/update/:id', jsonParser, ensureAuthenticated, async(req: R
     const objName = req.body.name;
     const objDescription = req.body.description;
     const objPrice = req.body.price;
+    const image = req.body.image;
 
     const objectsRepository  = new ObjectsRepository();
 
     const updateObjects = new UpdateObjectService(objectsRepository);
 
-    const response = await updateObjects.execute(id, {id: objId, name: objName, description: objDescription, price: objPrice});
+    const response = await updateObjects.execute(id, {id: objId, name: objName, description: objDescription, price: objPrice, image: image});
 
     return res.send(response);
 })
@@ -74,9 +78,7 @@ objectsRouter.get('/', ensureAuthenticated, async(req: Request, res: Response) =
     return res.send(response);
 })
 
-objectsRouter.get('/cards', ensureAuthenticated, async(req: Request, res: Response) => {
-    const id = req.user.id;
-
+objectsRouter.get('/cards', async(req: Request, res: Response) => {
     const objectsRepository = new ObjectsRepository();
 
     const showObjects = new ShowObjectListService(objectsRepository);
@@ -86,7 +88,7 @@ objectsRouter.get('/cards', ensureAuthenticated, async(req: Request, res: Respon
     return res.send(response);
 })
 
-objectsRouter.get('/:searchQuery', ensureAuthenticated, async(req: Request, res: Response) => {
+objectsRouter.get('/:searchQuery', async(req: Request, res: Response) => {
     const searchQuery = req.params.searchQuery;
 
     const objectsRepository = new ObjectsRepository();
@@ -95,7 +97,7 @@ objectsRouter.get('/:searchQuery', ensureAuthenticated, async(req: Request, res:
 
     let response
 
-    if(Number(searchQuery) > 1 && Number(searchQuery) <= 6){
+    if(Number(searchQuery) >= 1 && Number(searchQuery) <= 6){
         response = await showObjects.search({category: searchQuery});
     }
     else{
@@ -105,14 +107,27 @@ objectsRouter.get('/:searchQuery', ensureAuthenticated, async(req: Request, res:
     return res.send(response);
 })
 
-objectsRouter.delete('/:id', ensureAuthenticated, async(req: Request, res: Response) => {
+objectsRouter.get('/one/:id', async(req: Request, res: Response) => {
     const id = req.params.id;
+
+    const objectsRepository = new ObjectsRepository();
+
+    const showObjects = new ShowObjectListService(objectsRepository);
+
+    const response = await showObjects.showOne(id)
+
+    return res.send(response);
+})
+
+objectsRouter.delete('/:itemId', ensureAuthenticated, async(req: Request, res: Response) => {
+    const id = req.params.itemId;
+    const user_id = req.user.id;
 
     const objectsRepository = new ObjectsRepository();
 
     const deleteObjects = new DeleteObjectsService(objectsRepository);
 
-    const response = await deleteObjects.execute(id)
+    const response = await deleteObjects.execute(user_id, id)
 
     return res.send(response);
 })

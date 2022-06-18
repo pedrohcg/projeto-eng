@@ -3,6 +3,7 @@ import FakeUsersRepository from '../repositories/fakes/FakeUserRepository';
 import CreateUserService from './CreateUserService';
 import CreateChatService from "./CreateChatService";
 import SendMessageService from './SendMessageService';
+import AppError from '../errors/AppError'
 
 let fakeMessagesRepository: FakeMessagesRepository
 let fakeUsersRepository: FakeUsersRepository
@@ -40,8 +41,6 @@ describe('CreateChat', () => {
         const user1 = await fakeUsersRepository.findById('1')
         const user2 = await fakeUsersRepository.findById('2')
 
-        const response = await sendMessage.create(user1.id, {sender: user2.id, message: 'aaaa'})
-
-        expect(response.message).toMatch('Erro interno');
+        expect(sendMessage.create(user1.id, {sender: user2.id, message: 'aaaa'})).rejects.toBeInstanceOf(AppError);
     })
 })

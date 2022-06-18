@@ -15,9 +15,9 @@ export default class SendMessageService{
 
     public async create(receiver: string, {sender, message}: IRequest){
         const chat = await this.messagesRepository.getChat(sender, receiver);
-       
+        
         if(!chat){
-            return new AppError('Erro interno', 500);
+            throw new AppError('Erro interno', 500);
         }
         
         await this.messagesRepository.saveMessage(chat.id, {message: message, sender: sender});

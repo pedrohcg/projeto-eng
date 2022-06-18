@@ -8,16 +8,16 @@ export default class ObjectsRepository implements IObjectsRepository{
     constructor(){}
 
     public async findById(id: string): Promise<any> {
-        const user_id = Number(id);
+        const object_id = Number(id);
 
         await mssql.connect(SqlServerConfig);
 
-        const findUser = await mssql.query(`SELECT C.id, U.name Owner_Name, O.name, O.price, O.description, O.image, C.name Category_Name FROM Objects O 
+        const findUser = await mssql.query(`SELECT O.id, U.name OwnerName, O.name ObjectName, O.price, O.description, O.image, C.name CategoryName, U.id owner_id FROM Objects O 
                                             INNER JOIN Categories C 
                                             ON O.category_id =  C.id
                                             INNER JOIN Users U
                                             ON O.owner_id = U.id
-                                            WHERE O.id = ${user_id}`);
+                                            WHERE O.id = ${object_id}`);
 
         return findUser.recordset[0];
     }
@@ -27,7 +27,7 @@ export default class ObjectsRepository implements IObjectsRepository{
 
         await mssql.connect(SqlServerConfig);
 
-        const findUser = await mssql.query(`SELECT O.id, U.name Owner_Name, O.name Object_Name, O.price, O.description, O.image, C.name Category_Name FROM Objects O
+        const findUser = await mssql.query(`SELECT O.id, U.name OwnerName, O.name ObjectName, O.price, O.description, O.image, C.name CategoryName, U.id owner_id FROM Objects O
                                             INNER JOIN Categories C 
                                             ON O.category_id =  C.id
                                             INNER JOIN Users U
@@ -67,7 +67,12 @@ export default class ObjectsRepository implements IObjectsRepository{
     public async findRandomObject(): Promise<any> {
         await mssql.connect(SqlServerConfig);
 
-        const objects = await mssql.query(`SELECT TOP 5 * FROM Objects ORDER BY NEWID()`)
+        const objects = await mssql.query(`SELECT TOP 4 O.id, O.name ObjectName, O.price, O.description, O.image, U.name OwnerName, U.email, C.name Category FROM Objects O
+                                            INNER JOIN Users U
+                                            ON O.owner_id = U.id
+                                            INNER JOIN Categories C
+                                            ON C.id = O.category_id
+                                            ORDER BY NEWID()`)
 
         return objects.recordset
     }

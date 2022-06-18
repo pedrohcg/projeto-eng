@@ -1,4 +1,5 @@
 import IObjectsRepository from '../repositories/IObjectsRepository';
+import AppError from '../errors/AppError'
 
 export default class ShowObjectListService{
     private objectsRepository: IObjectsRepository;
@@ -7,7 +8,13 @@ export default class ShowObjectListService{
         this.objectsRepository = objectsRepository;
     }
 
-    public async execute(id: string){
+    public async execute(user_id: string, id: string){
+        const object = await this.objectsRepository.findById(id)
+        
+        if(object.owner_id != user_id){
+            throw new AppError('Usuário não pode excluir esse anúncio', 404);
+        }
+        
         await this.objectsRepository.delete(id);
 
         return {message: "Item deletado"};

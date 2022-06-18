@@ -1,6 +1,7 @@
 import FakeUsersRepository from "../repositories/fakes/FakeUserRepository";
 import CreateUserService from './CreateUserService';
 import ShowProfileService from './ShowProfileService';
+import AppError from '../errors/AppError'
 
 let fakeUsersRepository: FakeUsersRepository
 let createUser: CreateUserService
@@ -23,14 +24,14 @@ describe('ShowProfile', () => {
     })
 
     it("Should not have the user's password data", async() => {
+        await createUser.create({name: 'John', email: 'John@example.com', password: 'querty'});
+        
         const user = await showProfile.show('1');
 
         expect(user).not.toHaveProperty('password');
     })
 
-    it('Should be able to show a profile from a non-existing user', async() => {
-        const response = await showProfile.show('1');
-
-        expect(response.message).toMatch('Usuário não autenticado');
+    it('Should not be able to show a profile from a non-existing user', async() => {
+        expect(showProfile.show('1')).rejects.toBeInstanceOf(AppError);
     })
 })

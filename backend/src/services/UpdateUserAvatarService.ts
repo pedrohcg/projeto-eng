@@ -22,7 +22,7 @@ export default class UpdateUserAvatarService{
             const user = await this.usersRepository.findById(user_id);
 
             if(!user){
-                return new AppError('Usuário não autenticado', 401);
+                throw new AppError('Usuário não autenticado', 401);
             }
            
             if(user.avatar !== path.resolve(__dirname, '..','tmp', 'default.png')){
@@ -38,7 +38,7 @@ export default class UpdateUserAvatarService{
             return {message: 'Avatar alterado com sucesso'};
         }
 
-        return new AppError('Arquivo não encontrado', 404);
+        throw new AppError('Arquivo não encontrado', 404);
     }
 }
 
